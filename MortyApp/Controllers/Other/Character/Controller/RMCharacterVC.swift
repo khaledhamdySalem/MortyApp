@@ -20,6 +20,7 @@ class RMCharacterVC: UIViewController {
     private func configureView() {
         title = "Character"
         view.addSubview(characterListView)
+        characterListView.delegate = self
     }
     
     private func addConstraints() {
@@ -30,5 +31,14 @@ class RMCharacterVC: UIViewController {
             characterListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+   // Go To View Controller
+}
+
+extension RMCharacterVC: RMCharacterViewProtocol {
+    func didTabOnCell(_ character: RMCharacter) {
+        let viewModel = CharacterDetailsViewViewModel(character: character)
+        let detailsVC = RMCharacterDetailsViewController(viewModel: viewModel)
+        detailsVC.navigationItem.largeTitleDisplayMode = .never
+        self.show(detailsVC, sender: self)
+    }
 }

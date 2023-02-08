@@ -7,18 +7,24 @@
 
 import UIKit
 
+protocol RMCharacterViewProtocol: NSObject {
+    func didTabOnCell(_ character: RMCharacter)
+}
+
 class RMCharacterView: UIView {
     
     private let viewModel = RMCharacterViewModel()
-   
+    public weak var delegate: RMCharacterViewProtocol?
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
         collectionView.alpha = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = .init(top: 0, left: 10, bottom: 0, right: 10)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.contentInset = .init(top: 0, left: 10, bottom: 20, right: 10)
+        collectionView.register(RMCharacterCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
         return collectionView
     }()
     
@@ -59,16 +65,31 @@ class RMCharacterView: UIView {
     }
     
     private func configureCollectionView() {
+        viewModel.delegate = self
         collectionView.dataSource = viewModel
         collectionView.delegate = viewModel
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+extension RMCharacterView: RMCharacterViewModelProtocol {
+    
+    func didInitialCharacter() {
         collectionView.isHidden = false
+        spinner.stopAnimating()
+        collectionView.reloadData()
         UIView.animate(withDuration: 0.2, delay: 0) { [weak self] in
             self?.collectionView.alpha = 1
         }
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func didSelectCharacter(_ character: RMCharacter) {
+        delegate?.didTabOnCell(character)
     }
     
 }
