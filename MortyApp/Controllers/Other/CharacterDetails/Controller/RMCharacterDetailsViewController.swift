@@ -64,23 +64,28 @@ extension RMCharacterDetailsViewController: UICollectionViewDataSource, UICollec
         switch viewModel.sections[section] {
         case .photo:
             return 1
-        case .information:
-            return 4
-        case .episodes:
-            return 4
+        case .information(let viewModels):
+            return viewModels.count
+        case .episodes(let viewModels):
+            return viewModels.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        
         switch viewModel.sections[indexPath.section] {
-        case .photo:
-            cell.backgroundColor = .systemRed
-        case .information:
-            cell.backgroundColor = .systemBlue
-        case .episodes:
-            cell.backgroundColor = .systemBrown
+        case .photo(let viewModel):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterPhotoCell.identifier, for: indexPath) as! RMCharacterPhotoCell
+            cell.configure(with: viewModel)
+            return cell
+        case .information(let viewModels):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterInformationCell.identifier, for: indexPath) as! RMCharacterInformationCell
+            cell.configure(with: viewModels[indexPath.item])
+            return cell
+        case .episodes(let viewModels):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterEpisodeCell.identifier, for: indexPath) as! RMCharacterEpisodeCell
+            cell.configure(with: viewModels[indexPath.item])
+            return cell
         }
-        return cell
     }
 }

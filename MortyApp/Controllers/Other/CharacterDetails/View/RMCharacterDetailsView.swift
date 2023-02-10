@@ -55,7 +55,9 @@ class RMCharacterDetailsView: UIView {
         }
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(RMCharacterPhotoCell.self, forCellWithReuseIdentifier: RMCharacterPhotoCell.identifier)
+        collectionView.register(RMCharacterInformationCell.self, forCellWithReuseIdentifier: RMCharacterInformationCell.identifier)
+        collectionView.register(RMCharacterEpisodeCell.self, forCellWithReuseIdentifier: RMCharacterEpisodeCell.identifier)
         collectionView.contentInset = .init(top: 0, left: 0, bottom: 20, right: 0)
         return collectionView
     }
