@@ -8,19 +8,24 @@
 import Foundation
 
 final class RMImageLoader {
-    
     static let shared = RMImageLoader()
     
     private init() {}
     
-    private var imageCache = NSCache<NSString, NSData>()
+    private let imageCache = NSCache<NSString, NSData>()
     
-    public func downloadImage(url: URL, complition: @escaping(Result<Data, Error>) -> Void) {
+    public func downloadImage(url: URL?, complition: @escaping (Result<Data, Error>) -> Void) {
         
-        // Check here if we have data in cashing
+        guard let url = url else {
+            complition(.failure(URLError(.badURL)))
+            return
+        }
+        
         let key = url.absoluteString as NSString
         if let data = imageCache.object(forKey: key) {
+            print("Read FromCache")
             complition(.success(data as Data))
+            return
         }
         
         let request = URLRequest(url: url)
@@ -31,13 +36,12 @@ final class RMImageLoader {
                 return
             }
             
-            let key = url.absoluteString as NSString
             let value = data as NSData
             
             self?.imageCache.setObject(value, forKey: key)
+            
             complition(.success(data))
         }
-        
         task.resume()
     }
 }

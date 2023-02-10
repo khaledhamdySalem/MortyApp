@@ -70,7 +70,7 @@ class RMCharacterCollectionViewCell: UICollectionViewCell {
     
     public func configure(with viewModel: RMCharacterCollectionViewCellViewModel) {
         nameLabel.text = viewModel.name
-        statusLabel.text = viewModel.status
+        statusLabel.text = viewModel.status        
         viewModel.fetchImage {[weak self] result in
             switch result {
             case .success(let data):

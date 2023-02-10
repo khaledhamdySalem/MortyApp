@@ -11,26 +11,36 @@ import UIKit
 protocol RMCharacterViewModelProtocol: NSObject {
     func didInitialCharacter()
     func didSelectCharacter(_ character: RMCharacter)
+    func didLoadMoreCharacters(with indexpaths: [IndexPath])
 }
 
 final class RMCharacterViewModel: NSObject {
     
+    // MARK: -
     private var characters: [RMCharacter] = [] {
         didSet {
             characters.forEach { character in
-                characterCellViewModel.append(RMCharacterCollectionViewCellViewModel(
+                let viewModel = RMCharacterCollectionViewCellViewModel(
                     characterName: character.name,
                     characterStatus: character.status,
-                    characterImageUrl: URL(string: character.image)))
+                    characterImageUrl: URL(string: character.image))
+                
+                if !cellViewModel.contains(viewModel) {
+                    cellViewModel.append(viewModel)
+                }
             }
         }
     }
-    
-    private var characterCellViewModel = [RMCharacterCollectionViewCellViewModel]()
+   
+    // MARK: -- Variables
+    private var cellViewModel = [RMCharacterCollectionViewCellViewModel]()
     private var apiInfo: RMGetAllCharactersResponse.Info? = nil
-    public weak var delegate: RMCharacterViewModelProtocol?
     private var isLoadingMoreCharacter: Bool = false
+ 
+    // MARK: - Delegate
+    public weak var delegate: RMCharacterViewModelProtocol?
     
+    // MARK: - Fetch Character
     public func fetcharacters() {
         let request = RMRequest(endPoint: .character)
         RMService.shared.excute(request: request, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
@@ -48,23 +58,54 @@ final class RMCharacterViewModel: NSObject {
         }
     }
     
+    // MARK: -- Handle Pagination
+    private func fetchAdditionalCharacter() {
+        guard !isLoadingMoreCharacter else { return }
+        isLoadingMoreCharacter = true
+        guard let nextUrl = apiInfo?.next, let url = URL(string: nextUrl) else { return }
+        guard let request = RMRequest(url: url) else { return }
+        // Get Data
+        RMService.shared.excute(request: request, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
+            switch result {
+            case .success(let responseModel):
+                guard let self = self else { return }
+                self.apiInfo = responseModel.info
+                let moreResults = responseModel.results
+                
+                let originCount = self.characters.count
+                let newCount = moreResults.count
+                let total = originCount + newCount
+                let startingIndex = total - newCount
+                let indexPathsTo: [IndexPath] = Array(startingIndex..<(startingIndex+newCount)).compactMap({return IndexPath(row: $0, section: 0)})
+                
+                // Add Data for character list array
+                self.characters.append(contentsOf: moreResults)
+                
+                DispatchQueue.main.async {
+                    self.delegate?.didLoadMoreCharacters(with: indexPathsTo)
+                    self.isLoadingMoreCharacter = false
+                }
+            case .failure(let error):
+                print(String(describing: error))
+                self?.isLoadingMoreCharacter = false
+            }
+        }
+    }
+    
     private var shouldShowLoadMoreIndicator: Bool {
         return apiInfo?.next != nil
     }
-    
-    private func fetchAdditionalCharacter() {
-        
-    }
 }
 
+// MARK: - Handle CollectionView Datasource and Delegate
 extension RMCharacterViewModel: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return characterCellViewModel.count
+        return cellViewModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier, for: indexPath) as! RMCharacterCollectionViewCell
-        cell.configure(with: characterCellViewModel[indexPath.item])
+        cell.configure(with: cellViewModel[indexPath.item])
         return cell
     }
     
@@ -77,7 +118,10 @@ extension RMCharacterViewModel: UICollectionViewDataSource, UICollectionViewDele
         let character = characters[indexPath.item]
         delegate?.didSelectCharacter(character)
     }
-    
+}
+
+// MARK: - Handle Show Footer Cell And Pagination
+extension RMCharacterViewModel {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard !shouldShowLoadMoreIndicator else {
             return .init(width: collectionView.frame.width, height: 100)
@@ -90,22 +134,34 @@ extension RMCharacterViewModel: UICollectionViewDataSource, UICollectionViewDele
         footer.startAnimation()
         return footer
     }
-}
-
-
-extension RMCharacterViewModel: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldShowLoadMoreIndicator, !isLoadingMoreCharacter else {
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard shouldShowLoadMoreIndicator, !cellViewModel.isEmpty else {
             return
         }
-        
-        let offset = scrollView.contentOffset.y
-        let totalContentHeight = scrollView.contentSize.height
-        let fixedTotalScrollViewHeight = scrollView.frame.size.height
-        
-        if offset >= (totalContentHeight - fixedTotalScrollViewHeight) {
-            fetchAdditionalCharacter()
-            isLoadingMoreCharacter = true
+        if cellViewModel.count - 1 == indexPath.item {
+            
+            self.fetchAdditionalCharacter()
         }
-    }
+      }
 }
+
+// MARK: - Handle Show pagination data
+//extension RMCharacterViewModel: UIScrollViewDelegate {
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard shouldShowLoadMoreIndicator, !cellViewModel.isEmpty else {
+//            return
+//        }
+//
+//        Timer.scheduledTimer(withTimeInterval: 0.01, repeats: false) { [weak self] timer in
+//            let offset = scrollView.contentOffset.y
+//            let totalContentHeight = scrollView.contentSize.height
+//            let fixedTotalScrollViewHeight = scrollView.frame.size.height
+//
+//            if offset >= (totalContentHeight - fixedTotalScrollViewHeight) {
+//                self?.fetchAdditionalCharacter()
+//            }
+//            timer.invalidate()
+//        }
+//    }
+//}

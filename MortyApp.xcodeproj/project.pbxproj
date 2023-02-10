@@ -180,12 +180,12 @@
 			isa = PBXGroup;
 			children = (
 				EAEC50F029901CD000FCE1F0 /* Info.plist */,
-				EAE799D52992BE3E002097FA /* Extensions */,
 				EAEC514D29901DEE00FCE1F0 /* Supporting Files */,
-				EAEC511329901D5100FCE1F0 /* Controllers */,
-				EAEC510029901CFD00FCE1F0 /* Models */,
 				EAEC50FD29901CF300FCE1F0 /* Manager */,
+				EAE799D52992BE3E002097FA /* Extensions */,
+				EAEC510029901CFD00FCE1F0 /* Models */,
 				EAEC50F629901CE600FCE1F0 /* APIs */,
+				EAEC511329901D5100FCE1F0 /* Controllers */,
 			);
 			path = MortyApp;
 			sourceTree = "<group>";

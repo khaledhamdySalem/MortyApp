@@ -5,12 +5,12 @@
 //  Created by KH on 07/02/2023.
 //
 
-import Foundation
+import UIKit
 
 final class RMCharacterCollectionViewCellViewModel {
-    private let characterName: String
-    private let characterStatus: RMCharacterStatus
-    private let characterImageUrl: URL?
+    fileprivate var characterName: String
+    fileprivate let characterStatus: RMCharacterStatus
+    fileprivate let characterImageUrl: URL?
     
     init(
         characterName: String,
@@ -31,21 +31,18 @@ final class RMCharacterCollectionViewCellViewModel {
     }
     
     public func fetchImage(complition: @escaping (Result<Data, Error>) -> Void) {
-        
-        guard let url = characterImageUrl else {
-            complition(.failure(URLError(.badURL)))
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
-            guard let data = data else {
-                complition(.failure(URLError(.badServerResponse)))
-                return
-            }
-            complition(.success(data))
-        }
-        task.resume()
+        guard let url = characterImageUrl else { return }
+        RMImageLoader.shared.downloadImage(url: url, complition: complition)
+    }
+}
+
+extension RMCharacterCollectionViewCellViewModel: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(characterName)
+        hasher.combine(characterStatus)
+        hasher.combine(characterImageUrl)
+    }
+    static func == (lhs: RMCharacterCollectionViewCellViewModel, rhs: RMCharacterCollectionViewCellViewModel) -> Bool {
+        return lhs.hashValue == rhs.hashValue
     }
 }

@@ -89,8 +89,13 @@ extension RMCharacterView: RMCharacterViewModelProtocol {
         }
     }
     
+    func didLoadMoreCharacters(with indexpaths: [IndexPath]) {
+        collectionView.performBatchUpdates({[weak self] in
+            self?.collectionView.insertItems(at: indexpaths)
+        })
+    }
+    
     func didSelectCharacter(_ character: RMCharacter) {
         delegate?.didTabOnCell(character)
     }
-    
 }
