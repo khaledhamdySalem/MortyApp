@@ -85,6 +85,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EAC9D0702996BA81009B1ED5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		EAE799D52992BE3E002097FA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,8 +122,9 @@
 			children = (
 				EAE799E72992DA3C002097FA /* Controller */,
 				EAE799E42992DA23002097FA /* View */,
-				EAE799E12992D964002097FA /* ViewModel */,
 				EAE799E52992DA28002097FA /* Model */,
+				EAE799E12992D964002097FA /* ViewModel */,
+				EAC9D0702996BA81009B1ED5 /* Cell */,
 			);
 			path = CharacterDetails;
 			sourceTree = "<group>";

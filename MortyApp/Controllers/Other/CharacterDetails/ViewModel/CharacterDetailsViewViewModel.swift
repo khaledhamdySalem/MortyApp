@@ -5,17 +5,81 @@
 //  Created by KH on 07/02/2023.
 //
 
-import Foundation
+import UIKit
 
 final class CharacterDetailsViewViewModel {
     
     private let character: RMCharacter
     
+    init(character: RMCharacter) {
+        self.character = character
+    }
+    
+    enum SectionType: CaseIterable {
+        case photo
+        case information
+        case episodes
+    }
+    
+    var sections = SectionType.allCases
+    
     var title: String {
         return character.name
     }
     
-    init(character: RMCharacter) {
-        self.character = character
+    public var url: URL? {
+        return URL(string: character.url)
+    }
+    
+    public func createPhotoLayout() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)))
+        item.contentInsets = .init(top: 10, leading: 0, bottom: 10, trailing: 0)
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(0.5)),
+            subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    public func createInformationLayout() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .fractionalHeight(1.0)))
+        item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(150)),
+            subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    public func createEpisodeLayout() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)))
+        item.contentInsets = .init(top: 10, leading: 8, bottom: 10, trailing: 8)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.8),
+                heightDimension: .absolute(150)),
+            subitems: [item, item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+        return section
     }
 }
