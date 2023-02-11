@@ -64,10 +64,10 @@ extension RMCharacterDetailsViewController: UICollectionViewDataSource, UICollec
         switch viewModel.sections[section] {
         case .photo:
             return 1
-        case .information(let viewModels):
-            return viewModels.count
-        case .episodes(let viewModels):
-            return viewModels.count
+        case .information(let viewModel):
+            return viewModel.count
+        case .episodes(let viewModel):
+            return viewModel.count
         }
     }
     
@@ -78,14 +78,28 @@ extension RMCharacterDetailsViewController: UICollectionViewDataSource, UICollec
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterPhotoCell.identifier, for: indexPath) as! RMCharacterPhotoCell
             cell.configure(with: viewModel)
             return cell
-        case .information(let viewModels):
+        case .information(let viewModel):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterInformationCell.identifier, for: indexPath) as! RMCharacterInformationCell
-            cell.configure(with: viewModels[indexPath.item])
+            cell.configure(with: viewModel[indexPath.item])
             return cell
-        case .episodes(let viewModels):
+        case .episodes(let viewModel):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterEpisodeCell.identifier, for: indexPath) as! RMCharacterEpisodeCell
-            cell.configure(with: viewModels[indexPath.item])
+            cell.configure(with: viewModel[indexPath.item])
             return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch viewModel.sections[indexPath.section] {
+        case .photo:
+            break
+        case .information:
+            break
+        case .episodes:
+            let selection = self.viewModel.episodes[indexPath.row]
+            guard let url = URL(string: selection) else { return }
+            let episodeDetailsVC = RMEpisodeDetailsViewController(url: url)
+            show(episodeDetailsVC, sender: self)
         }
     }
 }

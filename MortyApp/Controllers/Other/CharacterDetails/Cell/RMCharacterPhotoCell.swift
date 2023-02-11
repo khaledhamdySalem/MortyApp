@@ -31,7 +31,6 @@ class RMCharacterPhotoCell: UICollectionViewCell {
     }
     
     private func addConstraint() {
-        translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
