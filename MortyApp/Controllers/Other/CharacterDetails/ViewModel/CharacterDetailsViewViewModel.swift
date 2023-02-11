@@ -17,6 +17,21 @@ final class CharacterDetailsViewViewModel {
         case episodes(_ viewModel: [RMCharacterEpisodeCellViewModel])
     }
     
+    /*
+     let id: Int
+     let name: String
+     let status: RMCharacterStatus
+     let species: String
+     let type: String
+     let gender: RMCharacterGender
+     let origin: RMOrigin
+     let location: RMSingleLocation
+     let image: String
+     let episode: [String]
+     let url: String
+     let created: String
+     */
+    
     init(character: RMCharacter) {
         self.character = character
         setSections()
@@ -24,20 +39,18 @@ final class CharacterDetailsViewViewModel {
     
     private func setSections() {
         sections = [
-            .photo(.init()),
+            .photo(.init(imageString: character.image)),
             .information([
-                .init(),
-                .init(),
-                .init(),
-                .init()
+                .init(title: character.status.text, value: "Status"),
+                .init(title: character.gender.rawValue, value: "Gender"),
+                .init(title: character.type, value: "Type"),
+                .init(title: character.species, value: "Species"),
+                .init(title: character.origin.name, value: "Origin"),
+                .init(title: character.location.name, value: "Location"),
+                .init(title: character.created, value: "Created"),
+                .init(title: "\(character.episode.count)", value: "Total Episode")
             ]),
-            .episodes([
-                .init(),
-                .init(),
-                .init(),
-                .init(),
-                .init()
-            ])
+            .episodes(character.episode.map({RMCharacterEpisodeCellViewModel(episodeDataUrl: URL(string: $0))}))
         ]
     }
     

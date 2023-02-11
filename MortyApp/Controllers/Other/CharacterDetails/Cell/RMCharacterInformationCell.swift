@@ -22,7 +22,9 @@ class RMCharacterInformationCell: UICollectionViewCell {
     }
     
     private func configureView() {
-        backgroundColor = .systemBrown
+        backgroundColor = .systemRed
+        contentView.layer.cornerRadius = 8
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     public func configure(with viewModel: RMCharacterInformationCellViewModel) {

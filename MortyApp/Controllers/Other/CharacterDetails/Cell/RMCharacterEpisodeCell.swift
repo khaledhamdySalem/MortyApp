@@ -17,12 +17,13 @@ class RMCharacterEpisodeCell: UICollectionViewCell {
         addConstraint()
     }
     
-    private func addConstraint() {
-        
-    }
-    
     private func configureView() {
         backgroundColor = .systemBlue
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func addConstraint() {
+        
     }
     
     public func configure(with viewModel: RMCharacterEpisodeCellViewModel) {
