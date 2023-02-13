@@ -8,10 +8,21 @@
 import UIKit
 
 final class RMSettingVC: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureView()
+        addConstraints()
+    }
+    
+    private func configureView() {
         title = "Settings"
         view.backgroundColor = .systemBackground
+    }
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            
+        ])
     }
 }
