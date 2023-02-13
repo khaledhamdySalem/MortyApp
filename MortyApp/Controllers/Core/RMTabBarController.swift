@@ -18,7 +18,7 @@ final class RMTabBarController: UITabBarController {
     private func setupTabs() {
         let characterVC = RMCharacterVC()
         let locationVC = RMLoactionVC()
-        let episodeVC = RMEpisodeVC()
+        let episodeVC = RMEpisodeListViewController()
         let settingVC = RMSettingVC()
         
         characterVC.navigationItem.largeTitleDisplayMode = .automatic

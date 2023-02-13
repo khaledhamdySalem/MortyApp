@@ -44,7 +44,6 @@ class RMCharacterEpisodeCell: UICollectionViewCell {
     
     private func configureView() {
         contentView.backgroundColor = .tertiarySystemBackground
-//        contentView.addSubviews(seasonLabel, nameLabel, airDateLabel)
     }
     
     private func addConstraint() {
@@ -55,12 +54,11 @@ class RMCharacterEpisodeCell: UICollectionViewCell {
         verticalStackView.addArrangedSubview(seasonLabel)
         verticalStackView.addArrangedSubview(nameLabel)
         verticalStackView.addArrangedSubview(airDateLabel)
-        verticalStackView.distribution = .fillEqually
+        verticalStackView.distribution = .fillProportionally
         verticalStackView.axis = .vertical
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            
             verticalStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             verticalStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
@@ -77,6 +75,7 @@ class RMCharacterEpisodeCell: UICollectionViewCell {
         }
         viewModel.fetchEpisode()
         
+        contentView.layer.borderColor = viewModel.borderColor.cgColor
     }
     
     override func prepareForReuse() {
@@ -88,7 +87,6 @@ class RMCharacterEpisodeCell: UICollectionViewCell {
     
     private func setLayout() {
         contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.systemBlue.cgColor
         contentView.layer.cornerRadius = 8
     }
     

@@ -13,5 +13,14 @@ final class RMLoactionVC: UIViewController {
         super.viewDidLoad()
         title = "Locations"
         view.backgroundColor = .systemBackground
+        addRightNavigationTab()
+    }
+    
+    private func addRightNavigationTab() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTabShare))
+    }
+    
+    @objc private func didTabShare() {
+        //TO Do SOMETHING
     }
 }

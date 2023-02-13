@@ -15,6 +15,8 @@ enum RMServiceError: Error {
 final class RMService {
     static let shared = RMService()
     
+//    private var cacheManager = RMAPICacheManager()
+    
     private init() {}
     
     public func excute<T: Codable>(request: RMRequest,

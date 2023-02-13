@@ -15,6 +15,16 @@ class RMCharacterVC: UIViewController {
         super.viewDidLoad()
         configureView()
         addConstraints()
+        addRightNavigationTab()
+    }
+    
+    private func addRightNavigationTab() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTabShare))
+    }
+    
+    @objc private func didTabShare() {
+        let vc = RMSearchViewController(config: RMSearchViewController.Config(type: .character))
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func configureView() {
@@ -31,7 +41,6 @@ class RMCharacterVC: UIViewController {
             characterListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-   // Go To View Controller
 }
 
 extension RMCharacterVC: RMCharacterViewProtocol {

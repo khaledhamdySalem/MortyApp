@@ -48,7 +48,7 @@ class RMCharacterDetailsViewController: UIViewController {
     }
     
     @objc private func didTabShare() {
-        //TO Do SOMETHING
+      
     }
     
     required init?(coder: NSCoder) {
@@ -99,7 +99,7 @@ extension RMCharacterDetailsViewController: UICollectionViewDataSource, UICollec
             let selection = self.viewModel.episodes[indexPath.row]
             guard let url = URL(string: selection) else { return }
             let episodeDetailsVC = RMEpisodeDetailsViewController(url: url)
-            show(episodeDetailsVC, sender: self)
+            navigationController?.pushViewController(episodeDetailsVC, animated: true)
         }
     }
 }

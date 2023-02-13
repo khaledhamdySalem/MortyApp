@@ -39,7 +39,10 @@ final class CharacterDetailsViewViewModel {
                 .init(type: .created, value: character.created),
                 .init(type: .episodeCount, value: "\(character.episode.count)")
             ]),
-            .episodes(character.episode.map({RMCharacterEpisodeCellViewModel(episodeDataUrl: URL(string: $0))}))
+            .episodes(
+                character.episode.map({RMCharacterEpisodeCellViewModel(
+                    episodeDataUrl: URL(string: $0),
+                    borderColor: UIColor.systemMint)}))
         ]
     }
     
