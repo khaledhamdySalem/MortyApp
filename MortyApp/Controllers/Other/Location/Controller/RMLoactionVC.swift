@@ -19,6 +19,7 @@ final class RMLoactionVC: UIViewController {
         addRightNavigationTab()
         viewModel.fetchLocations()
         viewModel.rmLoactionViewModelDelegate = self
+        locationView.delegate = self
     }
     
     private func configureView() {
@@ -48,5 +49,15 @@ final class RMLoactionVC: UIViewController {
 extension RMLoactionVC: RMLoactionViewModelDelegate {
     func didFetchIntialLocations() {
         locationView.configure(with: viewModel)
+    }
+}
+
+extension RMLoactionVC: RMLocationViewModelDelegate {
+    func didSelectLoactionFromList(_ location: RMLocation) {
+        //let viewModel = RMLocationDetailsViewViewModel(location: location)
+        let locationDetailsVC = RMLocationDetailsViewController(location: location)
+        locationDetailsVC.title = location.name
+        locationDetailsVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.show(locationDetailsVC, sender: self)
     }
 }

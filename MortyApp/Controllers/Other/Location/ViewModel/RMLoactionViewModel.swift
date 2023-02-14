@@ -26,6 +26,13 @@ final class RMLoactionViewModel {
     
     public private(set) var cellViewModels = [RMLocationTableViewCellViewModel]()
     
+    public func location(at index: Int) -> RMLocation? {
+        if index >= locations.count {
+            return nil
+        }
+        return self.locations[index]
+    }
+    
     private var apiInfo: RMGetAllLocationsResponse.Info?
     
     public weak var rmLoactionViewModelDelegate: RMLoactionViewModelDelegate?

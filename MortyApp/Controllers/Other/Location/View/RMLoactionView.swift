@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol RMLocationViewModelDelegate: AnyObject {
+    func didSelectLoactionFromList(_ location: RMLocation)
+}
+
 class RMLoactionView: UIView {
     
     // MARK: - Properties
@@ -23,7 +27,7 @@ class RMLoactionView: UIView {
     
     // MARK: - View
     private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: RMLocationTableViewCell.identifier)
         tableView.isHidden = true
@@ -37,6 +41,8 @@ class RMLoactionView: UIView {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()
+    
+    public weak var delegate: RMLocationViewModelDelegate?
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -93,11 +99,13 @@ extension RMLoactionView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RMLocationTableViewCell.identifier, for: indexPath) as! RMLocationTableViewCell
         guard let cellViewModels = viewModel?.cellViewModels else { fatalError("") }
-        cell.textLabel?.text = cellViewModels[indexPath.item].name
+        cell.configure(with: cellViewModels[indexPath.item])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let selection = viewModel?.location(at: indexPath.item) else { return }
+        delegate?.didSelectLoactionFromList(selection)
     }
 }
