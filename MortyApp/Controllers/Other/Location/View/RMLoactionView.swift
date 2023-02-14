@@ -25,7 +25,7 @@ class RMLoactionView: UIView {
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(RMLocationTableViewCell.self, forCellReuseIdentifier: RMLocationTableViewCell.identifier)
         tableView.isHidden = true
         tableView.alpha = 0
         return tableView
@@ -43,12 +43,18 @@ class RMLoactionView: UIView {
         super.init(frame: frame)
         configureView()
         addConstraints()
+        configureTableView()
     }
     
     private func configureView() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
         addSubviews(tableView, spinner)
+    }
+    
+    private func configureTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     private func addConstraints() {
@@ -71,5 +77,27 @@ class RMLoactionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension RMLoactionView: UITableViewDataSource, UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel?.cellViewModels.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: RMLocationTableViewCell.identifier, for: indexPath) as! RMLocationTableViewCell
+        guard let cellViewModels = viewModel?.cellViewModels else { fatalError("") }
+        cell.textLabel?.text = cellViewModels[indexPath.item].name
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

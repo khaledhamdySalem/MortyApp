@@ -10,12 +10,15 @@ import UIKit
 final class RMLoactionVC: UIViewController {
     
     private let locationView = RMLoactionView()
+    private let viewModel = RMLoactionViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         addConstraints()
         addRightNavigationTab()
+        viewModel.fetchLocations()
+        viewModel.rmLoactionViewModelDelegate = self
     }
     
     private func configureView() {
@@ -39,5 +42,11 @@ final class RMLoactionVC: UIViewController {
     
     @objc private func didTabShare() {
         //TO Do SOMETHING
+    }
+}
+
+extension RMLoactionVC: RMLoactionViewModelDelegate {
+    func didFetchIntialLocations() {
+        locationView.configure(with: viewModel)
     }
 }

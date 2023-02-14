@@ -7,24 +7,40 @@
 
 import Foundation
 
+protocol RMLoactionViewModelDelegate: AnyObject {
+    func didFetchIntialLocations()
+}
+
 final class RMLoactionViewModel {
     
-    private let locations = [RMLoaction]()
-    
-    private var cellViewModels = [String]()
-    
-    
-    init() {
-        
+    private var locations: [RMLocation] = [] {
+        didSet {
+            for location in locations {
+                let cellViewModel = RMLocationTableViewCellViewModel(locations: location)
+                if !cellViewModels.contains(cellViewModel) {
+                    cellViewModels.append(cellViewModel)
+                }
+            }
+        }
     }
+    
+    public private(set) var cellViewModels = [RMLocationTableViewCellViewModel]()
+    
+    private var apiInfo: RMGetAllLocationsResponse.Info?
+    
+    public weak var rmLoactionViewModelDelegate: RMLoactionViewModelDelegate?
     
     public func fetchLocations() {
         let request = RMRequest(endPoint: .location)
         RMService.shared.excute(request: request,
-                                expecting: String.self) { result in
+                                expecting: RMGetAllLocationsResponse.self) { [weak self] result in
             switch result {
             case .success(let model):
-                print(model)
+                self?.apiInfo = model.info
+                self?.locations = model.results
+                DispatchQueue.main.async {
+                    self?.rmLoactionViewModelDelegate?.didFetchIntialLocations()
+                }
             case .failure(let error):
                 print(String(describing: error))
             }
@@ -34,8 +50,4 @@ final class RMLoactionViewModel {
     private var hasMoreResults: Bool {
         return false
     }
-}
-
-struct RMLoaction: Codable {
-    
 }
