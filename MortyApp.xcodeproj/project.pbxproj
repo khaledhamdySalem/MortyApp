@@ -393,7 +393,6 @@
 			isa = PBXGroup;
 			children = (
 				EAD91D56299CC41C006F4EDA /* RMSearchViewViewModel.swift */,
-				EAD91D5D299CC6A3006F4EDA /* SubViewModel */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -410,19 +409,28 @@
 		EAD91D5C299CC694006F4EDA /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				EAD91D58299CC646006F4EDA /* RMNoSearchResultsView.swift */,
-				EAD91D5E299CC6D4006F4EDA /* RMSearchInputView.swift */,
+				EAD91D63299CCA32006F4EDA /* RMSearchInputView */,
+				EAD91D62299CCA27006F4EDA /* RMNoSearchResultsView */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
 		};
-		EAD91D5D299CC6A3006F4EDA /* SubViewModel */ = {
+		EAD91D62299CCA27006F4EDA /* RMNoSearchResultsView */ = {
 			isa = PBXGroup;
 			children = (
+				EAD91D58299CC646006F4EDA /* RMNoSearchResultsView.swift */,
 				EAD91D5A299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift */,
+			);
+			name = RMNoSearchResultsView;
+			sourceTree = "<group>";
+		};
+		EAD91D63299CCA32006F4EDA /* RMSearchInputView */ = {
+			isa = PBXGroup;
+			children = (
+				EAD91D5E299CC6D4006F4EDA /* RMSearchInputView.swift */,
 				EAD91D60299CC6E6006F4EDA /* RMSearchInputViewViewModel.swift */,
 			);
-			path = SubViewModel;
+			name = RMSearchInputView;
 			sourceTree = "<group>";
 		};
 		EAE799D52992BE3E002097FA /* Extensions */ = {
