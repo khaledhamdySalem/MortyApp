@@ -24,6 +24,7 @@ class RMCharacterVC: UIViewController {
     
     @objc private func didTabShare() {
         let vc = RMSearchViewController(config: RMSearchViewController.Config(type: .character))
+        vc.navigationItem.largeTitleDisplayMode = .never
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

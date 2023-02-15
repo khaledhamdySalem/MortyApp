@@ -42,7 +42,9 @@ final class RMLoactionVC: UIViewController {
     }
     
     @objc private func didTabShare() {
-        //TO Do SOMETHING
+        let vc = RMSearchViewController(config: .init(type: .location))
+        vc.navigationItem.largeTitleDisplayMode = .never
+        show(vc, sender: self)
     }
 }
 

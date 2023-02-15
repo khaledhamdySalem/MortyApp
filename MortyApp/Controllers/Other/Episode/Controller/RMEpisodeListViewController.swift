@@ -15,6 +15,7 @@ class RMEpisodeListViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         addConstraints()
+        addSearchButton()
     }
     
     private func configureView() {
@@ -31,6 +32,16 @@ class RMEpisodeListViewController: UIViewController {
             episodeListView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             episodeListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    private func addSearchButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearch))
+    }
+    
+    @objc private func didTapSearch() {
+        let vc = RMSearchViewController(config: .init(type: .episode))
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.show(vc, sender: self)
     }
 }
 
