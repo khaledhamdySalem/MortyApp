@@ -34,6 +34,7 @@ final class RMNoSearchResultsView: UIView {
         configureView()
         addConstraints()
         configure()
+        isHidden = true
     }
     
     private func configureView() {

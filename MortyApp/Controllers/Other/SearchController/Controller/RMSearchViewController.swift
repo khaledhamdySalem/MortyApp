@@ -7,53 +7,54 @@
 
 import UIKit
 
+// 1- Dynamic Search Option View
+// 2- Searching -> Sending Api To Get Search Results
+// 3- Render Result
+// 4- Render No Result
+
 final class RMSearchViewController: UIViewController {
+    // MARK: - Properties
+    private let viewModel: RMSearchViewViewModel
+    private var searchView: RMSearchView
     
+    // MARK: - Struct
     struct Config {
-        enum `Type` {
-            case character
-            case episode
-            case location
-            
-            var title: String {
-                switch self {
-                case .character:
-                    return "Search Character"
-                case .episode:
-                    return "Search Episode"
-                case .location:
-                    return "Search Location"
-                }
-            }
+        enum `Type`: String {
+            case character = "Search Character" // -> status || gender
+            case episode = "Search Episode" // None
+            case location = "Search Location" //  -> type
         }
+        
         let type: `Type`
     }
     
-    private var searchView: RMSearchView
-    private let viewModel: RMSearchViewViewModel
-    
+    // MARK: - Init
     init(config: Config) {
-        let viewModel = RMSearchViewViewModel(config: config)
-        self.viewModel = viewModel
-        self.searchView = RMSearchView(frame: .zero, viewModel: viewModel)
+        self.viewModel = .init(config: config)
+        self.searchView = .init(frame: .zero, viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         addConstraints()
         addSearchButton()
+        searchView.presentKeyboard()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    // MARK: - ConfigureView
     private func configureView() {
         view.backgroundColor = .systemBackground
-        title = viewModel.config.type.title
+        title = viewModel.config.type.rawValue
         view.addSubviews(searchView)
+        searchView.delegate = self
     }
     
     private func addConstraints() {
@@ -65,11 +66,37 @@ final class RMSearchViewController: UIViewController {
         ])
     }
     
+    // MARK: - Add SearchButton Nav
     private func addSearchButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapExcuteSearch))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(didTapExcuteSearch))
     }
     
+    // MARK: - Excute Search API
     @objc private func didTapExcuteSearch() {
-//        viewModel.excuteSearch()
+        viewModel.excuteSearch()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
+
+// MARK: - Delegate
+extension RMSearchViewController: RMSearchViewDelegate, RMSearchOptionPickerViewControllerDelegate {
+    func rmSearchView(_ searchView: RMSearchView, didSelection option: RMSearchInputViewViewModel.DynamicOption) {
+        let vc = RMSearchOptionPickerViewController(option: option)
+        vc.sheetPresentationController?.detents = [.medium()]
+        vc.sheetPresentationController?.prefersGrabberVisible = true
+        vc.delegate = self
+        present(vc, animated: true)
+    }
+    
+    func didSelectOption(_ selection: String, option: RMSearchInputViewViewModel.DynamicOption) {
+        DispatchQueue.main.async {
+            self.viewModel.set(value: selection, for: option)
+        }
+        
+        self.searchView.didSelectOptionFromList(option: option, value: selection)
+    }
+}
+

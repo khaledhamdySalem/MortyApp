@@ -43,6 +43,7 @@
 		EAD91D5B299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD91D5A299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift */; };
 		EAD91D5F299CC6D4006F4EDA /* RMSearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD91D5E299CC6D4006F4EDA /* RMSearchInputView.swift */; };
 		EAD91D61299CC6E6006F4EDA /* RMSearchInputViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD91D60299CC6E6006F4EDA /* RMSearchInputViewViewModel.swift */; };
+		EAD91D68299E5A1B006F4EDA /* RMSearchOptionPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD91D67299E5A1B006F4EDA /* RMSearchOptionPickerViewController.swift */; };
 		EAE799D72992BE4D002097FA /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE799D62992BE4D002097FA /* UIView+Extension.swift */; };
 		EAE799DA2992C258002097FA /* RMCharacterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE799D92992C258002097FA /* RMCharacterCollectionViewCell.swift */; };
 		EAE799DC2992C27D002097FA /* RMCharacterCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE799DB2992C27D002097FA /* RMCharacterCollectionViewCellViewModel.swift */; };
@@ -110,6 +111,7 @@
 		EAD91D5A299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMNoSearchResultsViewViewModel.swift; sourceTree = "<group>"; };
 		EAD91D5E299CC6D4006F4EDA /* RMSearchInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSearchInputView.swift; sourceTree = "<group>"; };
 		EAD91D60299CC6E6006F4EDA /* RMSearchInputViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSearchInputViewViewModel.swift; sourceTree = "<group>"; };
+		EAD91D67299E5A1B006F4EDA /* RMSearchOptionPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSearchOptionPickerViewController.swift; sourceTree = "<group>"; };
 		EAE799D62992BE4D002097FA /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		EAE799D92992C258002097FA /* RMCharacterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterCollectionViewCell.swift; sourceTree = "<group>"; };
 		EAE799DB2992C27D002097FA /* RMCharacterCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				EAC9D0972998D06D009B1ED5 /* RMSearchViewController.swift */,
+				EAD91D67299E5A1B006F4EDA /* RMSearchOptionPickerViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -393,6 +396,8 @@
 			isa = PBXGroup;
 			children = (
 				EAD91D56299CC41C006F4EDA /* RMSearchViewViewModel.swift */,
+				EAD91D66299E4D47006F4EDA /* No Result ViewModel */,
+				EAD91D65299E4D3A006F4EDA /* Search Input ViewModel */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -401,36 +406,42 @@
 			isa = PBXGroup;
 			children = (
 				EAD91D54299CC3E9006F4EDA /* RMSearchView.swift */,
-				EAD91D5C299CC694006F4EDA /* SubViews */,
+				EAD91D5C299CC694006F4EDA /* No Result View */,
+				EAD91D64299E4D25006F4EDA /* Search Input View */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		EAD91D5C299CC694006F4EDA /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				EAD91D63299CCA32006F4EDA /* RMSearchInputView */,
-				EAD91D62299CCA27006F4EDA /* RMNoSearchResultsView */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		EAD91D62299CCA27006F4EDA /* RMNoSearchResultsView */ = {
+		EAD91D5C299CC694006F4EDA /* No Result View */ = {
 			isa = PBXGroup;
 			children = (
 				EAD91D58299CC646006F4EDA /* RMNoSearchResultsView.swift */,
-				EAD91D5A299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift */,
 			);
-			name = RMNoSearchResultsView;
+			path = "No Result View";
 			sourceTree = "<group>";
 		};
-		EAD91D63299CCA32006F4EDA /* RMSearchInputView */ = {
+		EAD91D64299E4D25006F4EDA /* Search Input View */ = {
 			isa = PBXGroup;
 			children = (
 				EAD91D5E299CC6D4006F4EDA /* RMSearchInputView.swift */,
+			);
+			path = "Search Input View";
+			sourceTree = "<group>";
+		};
+		EAD91D65299E4D3A006F4EDA /* Search Input ViewModel */ = {
+			isa = PBXGroup;
+			children = (
 				EAD91D60299CC6E6006F4EDA /* RMSearchInputViewViewModel.swift */,
 			);
-			name = RMSearchInputView;
+			path = "Search Input ViewModel";
+			sourceTree = "<group>";
+		};
+		EAD91D66299E4D47006F4EDA /* No Result ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EAD91D5A299CC67D006F4EDA /* RMNoSearchResultsViewViewModel.swift */,
+			);
+			path = "No Result ViewModel";
 			sourceTree = "<group>";
 		};
 		EAE799D52992BE3E002097FA /* Extensions */ = {
@@ -781,6 +792,7 @@
 				EAEC510B29901CFD00FCE1F0 /* RMOrigin.swift in Sources */,
 				EAC9D0A6299A8B3F009B1ED5 /* RMSettingView.swift in Sources */,
 				EAC9D08F299806F5009B1ED5 /* RMEpisodeListView.swift in Sources */,
+				EAD91D68299E5A1B006F4EDA /* RMSearchOptionPickerViewController.swift in Sources */,
 				EAC9D07A2996C7CF009B1ED5 /* RMCharacterInformationCellViewModel.swift in Sources */,
 				EAC9D08A2998068D009B1ED5 /* RMGetAllEpisodesResponse.swift in Sources */,
 				EAC9D07C2996C7D9009B1ED5 /* RMCharacterEpisodeCellViewModel.swift in Sources */,
