@@ -5,57 +5,56 @@
 //  Created by KH on 15/02/2023.
 //
 
-import Foundation
+import UIKit
 
-struct RMSearchInputViewViewModel {
+final class RMSearchInputViewViewModel {
+    
     private let type: RMSearchViewController.Config.`Type`
     
+    // MARK: - Init
+    init(type: RMSearchViewController.Config.`Type`) {
+        self.type = type
+    }
+
     enum DynamicOption: String {
         case status = "Status"
         case gender = "Gender"
-        case locationType = "Location Type"
+        case location = "Location Type"
         
         var choices: [String] {
             switch self {
             case .status:
-                return ["Alive", "Dead", "unKnown"]
+                return ["alive", "dead", "unKnown"]
             case .gender:
-                return ["Male", "Female", "unKnown"]
-            case .locationType:
-                return ["cluster", "planet", "microface"]
+                return ["male", "female", "genderLess" , "unKnown"]
+            case .location:
+                return ["cluster", "planet", "microvest"]
             }
         }
     }
     
-    init(type: RMSearchViewController.Config.`Type`) {
-        self.type = type
-    }
-    
-    public var hasDynamicOptions: Bool {
+    public var hasDynamicOption: Bool {
         switch type {
-        case .character:
+        case .character, .location:
             return true
         case .episode:
             return false
-        case .location:
-            return true
         }
     }
     
     public var options: [DynamicOption] {
-        switch self.type {
+        switch type {
         case .character:
             return [.status, .gender]
         case .episode:
             return []
         case .location:
-            return [.locationType]
+            return [.location]
         }
     }
     
-    public var searchPlaceholderText: String {
-        switch self.type {
-            
+    public var searchPlaceHolder: String {
+        switch type {
         case .character:
             return "Character Name"
         case .episode:
@@ -64,4 +63,5 @@ struct RMSearchInputViewViewModel {
             return "Location Name"
         }
     }
+    
 }

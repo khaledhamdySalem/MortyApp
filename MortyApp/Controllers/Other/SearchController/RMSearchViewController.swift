@@ -13,11 +13,11 @@ import UIKit
 // 4- Render No Result
 
 final class RMSearchViewController: UIViewController {
-    // MARK: - Properties
-    private let viewModel: RMSearchViewViewModel
-    private var searchView: RMSearchView
     
-    // MARK: - Struct
+    // MARK: - Properties
+    private let searchView: RMSearchView
+    private let viewModel: RMSearchViewViewModel
+    
     struct Config {
         enum `Type`: String {
             case character = "Search Character" // -> status || gender
@@ -30,8 +30,8 @@ final class RMSearchViewController: UIViewController {
     
     // MARK: - Init
     init(config: Config) {
-        self.viewModel = .init(config: config)
-        self.searchView = .init(frame: .zero, viewModel: viewModel)
+        searchView = .init(frame: .zero, viewModel: RMSearchViewViewModel(config: config))
+        self.viewModel = RMSearchViewViewModel(config: config)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,15 +41,14 @@ final class RMSearchViewController: UIViewController {
         configureView()
         addConstraints()
         addSearchButton()
-        searchView.presentKeyboard()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        searchView.presentKeyboard()
     }
     
-    // MARK: - ConfigureView
     private func configureView() {
         view.backgroundColor = .systemBackground
         title = viewModel.config.type.rawValue
@@ -60,43 +59,36 @@ final class RMSearchViewController: UIViewController {
     private func addConstraints() {
         NSLayoutConstraint.activate([
             searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            searchView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            searchView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
-    // MARK: - Add SearchButton Nav
     private func addSearchButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(didTapExcuteSearch))
     }
     
-    // MARK: - Excute Search API
     @objc private func didTapExcuteSearch() {
         viewModel.excuteSearch()
     }
     
+    // MARK: - Excute Search API
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 // MARK: - Delegate
-extension RMSearchViewController: RMSearchViewDelegate, RMSearchOptionPickerViewControllerDelegate {
-    func rmSearchView(_ searchView: RMSearchView, didSelection option: RMSearchInputViewViewModel.DynamicOption) {
-        let vc = RMSearchOptionPickerViewController(option: option)
+extension RMSearchViewController: RMSearchViewDelegate {
+    func rmSearchView(_ inputView: RMSearchView, didSelectOption option: RMSearchInputViewViewModel.DynamicOption) {
+        let vc = RMSearchOptionPickerViewController(option: option) { [weak self] selection in
+            self?.searchView.selectOption(option: option, selection: selection)
+//            self?.viewModel.set(value: selection, for: option)
+        }
         vc.sheetPresentationController?.detents = [.medium()]
         vc.sheetPresentationController?.prefersGrabberVisible = true
-        vc.delegate = self
-        present(vc, animated: true)
-    }
-    
-    func didSelectOption(_ selection: String, option: RMSearchInputViewViewModel.DynamicOption) {
-        DispatchQueue.main.async {
-            self.viewModel.set(value: selection, for: option)
-        }
-        
-        self.searchView.didSelectOptionFromList(option: option, value: selection)
+        self.present(vc, animated: true)
     }
 }
 
