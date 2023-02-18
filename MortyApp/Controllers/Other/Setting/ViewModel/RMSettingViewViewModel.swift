@@ -5,8 +5,14 @@
 //  Created by KH on 13/02/2023.
 //
 
-import Foundation
+import UIKit
 
-final class RMSettingViewViewModel {
+class RMSettingViewViewModel {
+   
+    let cellViewModels: [SettingTableViewCellViewModel]
+    
+    init(cellViewModels: [SettingTableViewCellViewModel]) {
+        self.cellViewModels = cellViewModels
+    }
     
 }
